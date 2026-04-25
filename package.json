@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "@supabase/supabase-js": "latest"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
