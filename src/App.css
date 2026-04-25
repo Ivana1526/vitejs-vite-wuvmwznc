@@ -1,0 +1,269 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #eef2ff, #fff7ed);
+  color: #1e293b;
+}
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 36px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+/* FORMULÁRE */
+.add-box,
+.lesson-filter,
+.actions,
+.flashcard-panel {
+  background: white;
+  padding: 16px;
+  border-radius: 20px;
+  margin: 16px 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.add-box,
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.lesson-filter {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+input,
+select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+.reset {
+  background: #64748b;
+}
+
+.reset:hover {
+  background: #475569;
+}
+
+.delete {
+  background: #ef4444;
+}
+
+.delete:hover {
+  background: #dc2626;
+}
+
+.secondary {
+  background: #cbd5e1;
+  color: black;
+}
+
+.active {
+  background: #4f46e5;
+  color: white;
+}
+
+/* KARTIČKY */
+.flashcard {
+  background: #4f46e5;
+  color: white;
+  padding: 40px 20px;
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+.flashcard-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.flashcard-text {
+  font-size: 26px;
+  margin: 10px 0;
+}
+
+.flashcard-hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.flashcard-tabs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* PRIRAĎOVANIE */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.card {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 14px;
+}
+
+.en {
+  background: #4f46e5;
+  color: white;
+  cursor: grab;
+  display: flex;
+  justify-content: space-between;
+}
+
+.drop {
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+}
+
+.correct {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+
+.wrong {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+.used {
+  opacity: 0.4;
+}
+
+/* VÝSLEDKY */
+.result {
+  text-align: center;
+  padding: 10px;
+  background: #eef2ff;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.exercise-info {
+  text-align: center;
+  color: #64748b;
+}
+
+/* CVIČENIE VIET */
+.sentence-exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sentence-exercise-card {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.correct-answer {
+  font-size: 14px;
+  color: #16a34a;
+}
+
+/* LEKCIE */
+.lesson-list {
+  display: grid;
+  gap: 16px;
+}
+
+.lesson-card {
+  background: white;
+  padding: 16px;
+  border-radius: 20px;
+}
+
+.word-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+/* EMPTY */
+.empty-state {
+  text-align: center;
+  color: #64748b;
+  padding: 20px;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card span {
+  display: block;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.stat-card strong {
+  font-size: 24px;
+  color: #4f46e5;
+}
+
+@media (max-width: 700px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
