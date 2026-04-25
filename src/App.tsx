@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // 🔥 SEM VLOŽ SVOJE ÚDAJE
 const supabaseUrl = "https://cuxbeefpgtvxttrtksws.supabase.co";
-const supabaseKey = "sb_publishable_BsiYen4XDNn0T7bunOfniA_Qs_jdCiB";
+const supabaseKey = "sb_publishable_BsiYen4XDNm0T7bunOfniA_Qs_jdciB";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const today = new Date().toISOString().slice(0, 10);
