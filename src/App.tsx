@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // 🔥 SEM VLOŽ SVOJE ÚDAJE
 const supabaseUrl = "https://cuxbeefpgtvxttrtksws.supabase.co";
-const supabaseKey = "sb_publishable_BsiYen4XDNm0T7bunOfniA_Qs_jdciB";
+const supabaseKey = "sb_publishable_BsiYen4XDNn0T7bunOfniA_Qs_jdCiB";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const today = new Date().toISOString().slice(0, 10);
@@ -34,6 +34,9 @@ export default function App() {
 
   const loadWords = async () => {
     const { data, error } = await supabase.from("words").select("*");
+  
+console.log("DATA:", data);
+console.log("ERROR:", error);
     if (error) {
       console.error(error);
     } else {
