@@ -26,6 +26,9 @@ export default function App() {
   const [words, setWords] = useState([]);
   const [newEn, setNewEn] = useState("");
   const [newSk, setNewSk] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editEn, setEditEn] = useState("");
+  const [editSk, setEditSk] = useState("");
 
   // 🔥 NAČÍTANIE Z CLOUDU
   useEffect(() => {
@@ -34,9 +37,6 @@ export default function App() {
 
   const loadWords = async () => {
     const { data, error } = await supabase.from("words").select("*");
-  
-console.log("DATA:", data);
-console.log("ERROR:", error);
     if (error) {
       console.error(error);
     } else {
@@ -49,7 +49,7 @@ console.log("ERROR:", error);
     if (!newEn || !newSk) return;
 
     const newWord = {
-      id: Date.now(),
+      id: Date.now().toString(),
       en: newEn,
       sk: newSk,
       created_at: new Date().toISOString(),
@@ -63,17 +63,32 @@ console.log("ERROR:", error);
       loadWords();
     }
   };
+
+  // ✏️ EDITOVANIE Z CLOUDU
+  const updateWord = async (id) => {
+    const { error } = await supabase
+      .from("words")
+      .update({ en: editEn, sk: editSk })
+      .eq("id", id.toString());
+
+    if (!error) {
+      setEditingId(null);
+      loadWords();
+    }
+  };
+
+  // 🗑️ MAZANIE Z CLOUDU
   const deleteWord = async (id) => {
     const { error } = await supabase
       .from("words")
       .delete()
-      .eq("id", id);
-  
+      .eq("id", id.toString());
+
     if (!error) {
       loadWords();
     }
   };
-  
+
   return (
     <div className="app">
       <h1>🌍 Cloud verzia appky</h1>
@@ -95,9 +110,24 @@ console.log("ERROR:", error);
       <h2>Slovíčka z cloudu</h2>
       {words.map((w) => (
         <div key={w.id} className="word-row">
-          <strong>{w.en}</strong> — {w.sk}
-          <button onClick={() => speak(w.en)}>🔊</button>
-          <button onClick={() => deleteWord(w.id)}>🗑️</button>
+          {editingId === w.id ? (
+            <>
+              <input value={editEn} onChange={(e) => setEditEn(e.target.value)} />
+              <input value={editSk} onChange={(e) => setEditSk(e.target.value)} />
+              <button onClick={() => updateWord(w.id)}>💾</button>
+            </>
+          ) : (
+            <>
+              <strong>{w.en}</strong> — {w.sk}
+              <button onClick={() => speak(w.en)}>🔊</button>
+              <button onClick={() => {
+                setEditingId(w.id);
+                setEditEn(w.en);
+                setEditSk(w.sk);
+              }}>✏️</button>
+              <button onClick={() => deleteWord(w.id)}>🗑️</button>
+            </>
+          )}
         </div>
       ))}
     </div>
