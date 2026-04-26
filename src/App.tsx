@@ -30,6 +30,7 @@ export default function App() {
   const [editEn, setEditEn] = useState("");
   const [editSk, setEditSk] = useState("");
   const [search, setSearch] = useState("");
+  const [lessonDate, setLessonDate] = useState("");
   // 🔥 NAČÍTANIE Z CLOUDU
   useEffect(() => {
     loadWords();
@@ -94,6 +95,11 @@ export default function App() {
       <h1>🌍 Cloud verzia appky</h1>
 
       <div className="add-box">
+      <input
+  type="date"
+  value={lessonDate}
+  onChange={(e) => setLessonDate(e.target.value)}
+/>
         <input
           placeholder="English"
           value={newEn}
