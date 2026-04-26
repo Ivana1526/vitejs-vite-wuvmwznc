@@ -61,6 +61,7 @@ export default function App() {
 
     if (!error) {
       setNewEn("");
+      setLessonDate("");
       setNewSk("");
       loadWords();
     }
