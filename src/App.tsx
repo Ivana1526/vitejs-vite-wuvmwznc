@@ -29,7 +29,7 @@ export default function App() {
   const [editingId, setEditingId] = useState(null);
   const [editEn, setEditEn] = useState("");
   const [editSk, setEditSk] = useState("");
-
+  const [search, setSearch] = useState("");
   // 🔥 NAČÍTANIE Z CLOUDU
   useEffect(() => {
     loadWords();
@@ -108,7 +108,17 @@ export default function App() {
       </div>
 
       <h2>Slovíčka z cloudu</h2>
-      {words.map((w) => (
+      <input
+  placeholder="Hľadať..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+/>
+{words
+  .filter((w) =>
+    w.en.toLowerCase().includes(search.toLowerCase()) ||
+    w.sk.toLowerCase().includes(search.toLowerCase())
+  )
+  .map((w) => (
         <div key={w.id} className="word-row">
           {editingId === w.id ? (
             <>
