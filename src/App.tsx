@@ -53,6 +53,7 @@ export default function App() {
       id: Date.now().toString(),
       en: newEn,
       sk: newSk,
+      lesson_date: lessonDate,
       created_at: new Date().toISOString(),
     };
 
