@@ -45,6 +45,14 @@ export default function App() {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
     });
+  
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+  
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -228,10 +236,12 @@ export default function App() {
           onChange={(e) => setLessonDate(e.target.value)}
         />
         <input
-          placeholder="English"
-          value={newEn}
-          onChange={(e) => setNewEn(e.target.value)}
-        />
+         placeholder="English"
+         value={newEn}
+         spellCheck={true}
+         lang="en"
+         onChange={(e) => setNewEn(e.target.value)}
+       />
         <input
           placeholder="Slovensky"
           value={newSk}
@@ -263,7 +273,12 @@ export default function App() {
         <div key={w.id} className="word-row">
           {editingId === w.id ? (
             <>
-              <input value={editEn} onChange={(e) => setEditEn(e.target.value)} />
+              <input
+  value={editEn}
+  spellCheck={true}
+  lang="en"
+  onChange={(e) => setEditEn(e.target.value)}
+/>
               <input value={editSk} onChange={(e) => setEditSk(e.target.value)} />
               <button onClick={() => updateWord(w.id)}>💾</button>
             </>
