@@ -5,62 +5,61 @@ body {
   color: #1e293b;
 }
 
-.app {
-  max-width: 1000px;
+.app,
+.auth-box {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 28px;
 }
 
 h1 {
   text-align: center;
-  font-size: 36px;
+  font-size: 34px;
 }
 
-.subtitle {
-  text-align: center;
-  color: #64748b;
-  margin-bottom: 20px;
+h2 {
+  margin-top: 34px;
 }
 
-/* FORMULÁRE */
+.auth-box,
 .add-box,
-.lesson-filter,
-.actions,
-.flashcard-panel {
+.filters,
+.word-row,
+.matching-column {
   background: white;
-  padding: 16px;
-  border-radius: 20px;
-  margin: 16px 0;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.auth-box {
+  max-width: 420px;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .add-box,
-.actions {
+.filters {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  justify-content: center;
-}
-
-.lesson-filter {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
+  margin: 20px 0;
 }
 
 input,
 select {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
 }
 
-/* BUTTONS */
 button {
-  padding: 10px 14px;
-  border-radius: 10px;
   border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
   background: #4f46e5;
   color: white;
   font-weight: bold;
@@ -71,88 +70,63 @@ button:hover {
   background: #4338ca;
 }
 
-.reset {
-  background: #64748b;
-}
-
-.reset:hover {
-  background: #475569;
-}
-
-.delete {
-  background: #ef4444;
-}
-
-.delete:hover {
-  background: #dc2626;
-}
-
-.secondary {
-  background: #cbd5e1;
-  color: black;
-}
-
-.active {
-  background: #4f46e5;
-  color: white;
-}
-
-/* KARTIČKY */
-.flashcard {
-  background: #4f46e5;
-  color: white;
-  padding: 40px 20px;
-  border-radius: 20px;
-  text-align: center;
-  cursor: pointer;
-  margin: 20px 0;
-}
-
-.flashcard-label {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-.flashcard-text {
-  font-size: 26px;
-  margin: 10px 0;
-}
-
-.flashcard-hint {
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-.flashcard-tabs {
+.word-row {
+  margin: 12px 0;
   display: flex;
+  align-items: center;
   gap: 10px;
-  justify-content: center;
+  flex-wrap: wrap;
 }
 
-/* PRIRAĎOVANIE */
-.columns {
+.word-row strong {
+  font-size: 18px;
+  color: #312e81;
+}
+
+.lesson-date {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.matching-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 22px;
+  margin-top: 18px;
 }
 
-.card {
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 14px;
+.matching-column h3 {
+  text-align: center;
 }
 
-.en {
+.drag-card,
+.drop-card {
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 18px;
+  min-height: 46px;
+}
+
+.drag-card {
   background: #4f46e5;
   color: white;
   cursor: grab;
-  display: flex;
-  justify-content: space-between;
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
 }
 
-.drop {
-  border: 2px dashed #cbd5e1;
+.drag-card:hover {
+  transform: translateY(-2px);
+}
+
+.drop-card {
   background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .correct {
@@ -165,105 +139,15 @@ button:hover {
   border-color: #ef4444;
 }
 
-.used {
-  opacity: 0.4;
-}
-
-/* VÝSLEDKY */
-.result {
-  text-align: center;
-  padding: 10px;
-  background: #eef2ff;
-  border-radius: 10px;
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-.exercise-info {
-  text-align: center;
-  color: #64748b;
-}
-
-/* CVIČENIE VIET */
-.sentence-exercise-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sentence-exercise-card {
-  background: white;
-  padding: 16px;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.correct-answer {
-  font-size: 14px;
-  color: #16a34a;
-}
-
-/* LEKCIE */
-.lesson-list {
-  display: grid;
-  gap: 16px;
-}
-
-.lesson-card {
-  background: white;
-  padding: 16px;
-  border-radius: 20px;
-}
-
-.word-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-/* EMPTY */
-.empty-state {
-  text-align: center;
-  color: #64748b;
-  padding: 20px;
-}
-
-/* MOBILE */
 @media (max-width: 700px) {
-  .columns {
+  .matching-box {
     grid-template-columns: 1fr;
   }
-}.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 16px 0;
-}
 
-.stat-card {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-}
-
-.stat-card span {
-  display: block;
-  color: #64748b;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-.stat-card strong {
-  font-size: 24px;
-  color: #4f46e5;
-}
-
-@media (max-width: 700px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
+  .add-box,
+  .filters,
+  .word-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
