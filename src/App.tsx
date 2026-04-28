@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // 🔥 SEM VLOŽ SVOJE ÚDAJE
 const supabaseUrl = "https://cuxbeefpgtvxttrtksws.supabase.co";
-const supabaseKey = "sb_publishable_BsiYen4XDNm0T7bunOfniA_Qs_jdciB";
+const supabaseKey = "sb_publishable_BsiYen4XDNn0T7bunOfniA_Qs_jdCiB";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const today = new Date().toISOString().slice(0, 10);
@@ -122,15 +122,20 @@ export default function App() {
       user_id: user.id,
     };
 
-    const { error } = await supabase.from("words").insert([newWord]);
+    const { data, error } = await supabase
+      .from("words")
+      .insert([newWord])
+      .select()
+      .single();
 
     if (!error) {
+      setWords((prev) => [data, ...prev]);
       setNewEn("");
       setNewSk("");
       setLessonDate(today);
-      loadWords();
     } else {
       console.error(error);
+      alert(error.message);
     }
   };
 
