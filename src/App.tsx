@@ -244,10 +244,36 @@ export default function App() {
   const handleDrop = (skWordId) => {
     if (!draggedWordId) return;
 
-    setMatches((prev) => ({
-      ...prev,
-      [skWordId]: draggedWordId,
-    }));
+    setMatches((prev) => {
+      const updated = { ...prev };
+
+      Object.keys(updated).forEach((key) => {
+        if (updated[key] === draggedWordId) {
+          delete updated[key];
+        }
+      });
+
+      updated[skWordId] = draggedWordId;
+      return updated;
+    });
+
+    setDraggedWordId(null);
+  };
+
+  const handleReturnToEn = () => {
+    if (!draggedWordId) return;
+
+    setMatches((prev) => {
+      const updated = { ...prev };
+
+      Object.keys(updated).forEach((key) => {
+        if (updated[key] === draggedWordId) {
+          delete updated[key];
+        }
+      });
+
+      return updated;
+    });
 
     setDraggedWordId(null);
   };
@@ -338,7 +364,11 @@ export default function App() {
         </div>
 
         <div className="matching-box">
-          <div className="matching-column">
+          <div
+            className="matching-column"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleReturnToEn}
+          >
             <h3>EN</h3>
             {matchingEnWords.map((w) => {
               const isMatched = Object.values(matches).includes(w.id);
@@ -390,7 +420,13 @@ export default function App() {
                   onDrop={() => handleDrop(w.id)}
                 >
                   <strong>{w.sk}</strong>
-                  <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                  <span
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}
+                    draggable={!!matchedWord}
+                    onDragStart={() => {
+                      if (matchedWord) setDraggedWordId(matchedWord.id);
+                    }}
+                  >
                     {matchedWord ? (
                       <>
                         <span>{matchedWord.en}</span>
