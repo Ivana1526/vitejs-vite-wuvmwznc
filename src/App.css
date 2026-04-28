@@ -151,3 +151,30 @@ button:hover {
     align-items: stretch;
   }
 }
+.drag-card {
+  transition: all 0.2s ease;
+}
+
+.drag-card:active {
+  transform: scale(1.05);
+}
+
+.drop-card {
+  transition: all 0.2s ease;
+}
+
+.drop-card.correct {
+  background: rgba(0, 200, 0, 0.1);
+  border: 2px solid #00c853;
+}
+
+.drop-card.wrong {
+  background: rgba(255, 0, 0, 0.1);
+  border: 2px solid #ff5252;
+}
+
+/* hover efekt */
+.drag-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
