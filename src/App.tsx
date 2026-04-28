@@ -91,6 +91,29 @@ export default function App() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!draggedWordId) return;
+
+    const handleAutoScroll = (e) => {
+      const edgeSize = 90;
+      const scrollSpeed = 14;
+
+      if (e.clientY < edgeSize) {
+        window.scrollBy({ top: -scrollSpeed, behavior: "auto" });
+      }
+
+      if (window.innerHeight - e.clientY < edgeSize) {
+        window.scrollBy({ top: scrollSpeed, behavior: "auto" });
+      }
+    };
+
+    window.addEventListener("dragover", handleAutoScroll);
+
+    return () => {
+      window.removeEventListener("dragover", handleAutoScroll);
+    };
+  }, [draggedWordId]);
+
   const signUp = async () => {
     const { error } = await supabase.auth.signUp({
       email: email,
