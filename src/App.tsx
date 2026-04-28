@@ -68,6 +68,7 @@ export default function App() {
   const [matchingSearch, setMatchingSearch] = useState("");
   const [matchingFilterDate, setMatchingFilterDate] = useState("all");
   const [draggedWordId, setDraggedWordId] = useState(null);
+  const [selectedWordId, setSelectedWordId] = useState(null);
   const [matches, setMatches] = useState({});
   const [shuffleSeed, setShuffleSeed] = useState(0);
 
@@ -350,8 +351,26 @@ export default function App() {
     setDraggedWordId(null);
   };
 
+  const selectWordForMobile = (wordId) => {
+    setSelectedWordId((prev) => (prev === wordId ? null : wordId));
+  };
+
+  const handleMobileDrop = (skWordId) => {
+    if (!selectedWordId) return;
+    moveWordToSk(skWordId, selectedWordId);
+    setSelectedWordId(null);
+  };
+
+  const handleMobileReturnToEn = () => {
+    if (!selectedWordId) return;
+    returnWordToEn(selectedWordId);
+    setSelectedWordId(null);
+  };
+
   const resetMatching = () => {
     setMatches({});
+    setSelectedWordId(null);
+    setDraggedWordId(null);
     setShuffleSeed((prev) => prev + 1);
   };
 
@@ -411,7 +430,7 @@ export default function App() {
 
       <section className="app-section matching-section">
         <h2>🧩 Priraďovanie slovíčok</h2>
-        <p>Presuň anglické slovíčko na správny slovenský preklad.</p>
+        <p>Presuň anglické slovíčko na správny slovenský preklad. Na mobile najprv ťukni na EN slovíčko a potom na SK preklad.</p>
 
         <div className="progress-box">
           <div
@@ -447,6 +466,7 @@ export default function App() {
           <div
             className="matching-column"
             data-return-zone="en"
+            onClick={handleMobileReturnToEn}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleReturnToEn}
           >
@@ -457,12 +477,16 @@ export default function App() {
               return (
                 <div
                   key={w.id}
-                  className="drag-card"
+                  className={`drag-card ${selectedWordId === w.id ? "selected" : ""}`}
                   draggable={!isMatched}
                   onDragStart={() => setDraggedWordId(w.id)}
                   onTouchStart={() => setDraggedWordId(w.id)}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isMatched) selectWordForMobile(w.id);
+                  }}
                   style={{ opacity: isMatched ? 0.2 : 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}
                 >
                   {isMatched ? (
@@ -501,6 +525,7 @@ export default function App() {
                   key={w.id}
                   data-drop-id={w.id}
                   className={`drop-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`}
+                  onClick={() => handleMobileDrop(w.id)}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => handleDrop(w.id)}
                 >
@@ -516,6 +541,10 @@ export default function App() {
                     }}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (matchedWord) selectWordForMobile(matchedWord.id);
+                    }}
                   >
                     {matchedWord ? (
                       <>
