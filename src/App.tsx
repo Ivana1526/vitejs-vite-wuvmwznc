@@ -4,7 +4,7 @@ import "./App.css";
 import { createClient } from "@supabase/supabase-js";
 
 // 🔥 SEM VLOŽ SVOJE ÚDAJE
-const supabaseUrl = "https://vitejs-vite-wuvmwznc.vercel.app/";
+const supabaseUrl = "https://cuxbeefpgtvxttrtksws.supabase.co";
 const supabaseKey = "sb_publishable_BsiYen4XDNn0T7bunOfniA_Qs_jdCiB";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
