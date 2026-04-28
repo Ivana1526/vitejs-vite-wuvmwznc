@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // 🔥 SEM VLOŽ SVOJE ÚDAJE
 const supabaseUrl = "https://cuxbeefpgtvxttrtksws.supabase.co";
-const supabaseKey = "sb_publishable_BsiYen4XDNn0T7bunOfniA_Qs_jdCiB";
+const supabaseKey = "sb_publishable_BsiYen4XDNm0T7bunOfniA_Qs_jdciB";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const today = new Date().toISOString().slice(0, 10);
@@ -38,6 +38,8 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [lessonDate, setLessonDate] = useState(today);
   const [filterDate, setFilterDate] = useState("all");
+  const [matchingSearch, setMatchingSearch] = useState("");
+  const [matchingFilterDate, setMatchingFilterDate] = useState("all");
   const [draggedWordId, setDraggedWordId] = useState(null);
   const [matches, setMatches] = useState({});
 
@@ -45,11 +47,11 @@ export default function App() {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
     });
-  
+
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-  
+
     return () => {
       listener.subscription.unsubscribe();
     };
@@ -185,6 +187,19 @@ export default function App() {
     });
   }, [words, search, filterDate]);
 
+  const matchingWords = useMemo(() => {
+    return words.filter((w) => {
+      const matchesSearch =
+        w.en.toLowerCase().includes(matchingSearch.toLowerCase()) ||
+        w.sk.toLowerCase().includes(matchingSearch.toLowerCase());
+
+      const matchesDate =
+        matchingFilterDate === "all" || w.lesson_date === matchingFilterDate;
+
+      return matchesSearch && matchesDate;
+    });
+  }, [words, matchingSearch, matchingFilterDate]);
+
   const handleDrop = (skWordId) => {
     if (!draggedWordId) return;
 
@@ -229,121 +244,149 @@ export default function App() {
       <button onClick={signOut}>Odhlásiť</button>
       <h1>🌍 Cloud verzia appky</h1>
 
-      <div className="add-box">
-        <input
-          type="date"
-          value={lessonDate}
-          onChange={(e) => setLessonDate(e.target.value)}
-        />
-        <input
-         placeholder="English"
-         value={newEn}
-         spellCheck={true}
-         lang="en"
-         onChange={(e) => setNewEn(e.target.value)}
-       />
-        <input
-          placeholder="Slovensky"
-          value={newSk}
-          onChange={(e) => setNewSk(e.target.value)}
-        />
-        <button onClick={addWord}>Pridať</button>
-      </div>
+      <section className="app-section add-section">
+        <h2>➕ Pridať slovíčko</h2>
 
-      <h2>Slovíčka z cloudu</h2>
-
-      <div className="filters">
-        <input
-          placeholder="Hľadať..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <select value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
-          <option value="all">Všetky lekcie</option>
-          {dateOptions.map((date) => (
-            <option key={date} value={date}>
-              {formatDate(date)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {filteredWords.map((w) => (
-        <div key={w.id} className="word-row">
-          {editingId === w.id ? (
-            <>
-              <input
-  value={editEn}
-  spellCheck={true}
-  lang="en"
-  onChange={(e) => setEditEn(e.target.value)}
-/>
-              <input value={editSk} onChange={(e) => setEditSk(e.target.value)} />
-              <button onClick={() => updateWord(w.id)}>💾</button>
-            </>
-          ) : (
-            <>
-              <strong>{w.en}</strong> — {w.sk}
-              <span className="lesson-date">📅 {formatDate(w.lesson_date)}</span>
-              <button onClick={() => speak(w.en)}>🔊</button>
-              <button
-                onClick={() => {
-                  setEditingId(w.id);
-                  setEditEn(w.en);
-                  setEditSk(w.sk);
-                }}
-              >
-                ✏️
-              </button>
-              <button onClick={() => deleteWord(w.id)}>🗑️</button>
-            </>
-          )}
+        <div className="add-box">
+          <input
+            type="date"
+            value={lessonDate}
+            onChange={(e) => setLessonDate(e.target.value)}
+          />
+          <input
+            placeholder="English"
+            value={newEn}
+            spellCheck={true}
+            lang="en"
+            onChange={(e) => setNewEn(e.target.value)}
+          />
+          <input
+            placeholder="Slovensky"
+            value={newSk}
+            onChange={(e) => setNewSk(e.target.value)}
+          />
+          <button onClick={addWord}>Pridať</button>
         </div>
-      ))}
+      </section>
 
-      <h2>🧩 Priraďovanie slovíčok</h2>
-      <p>Presuň anglické slovíčko na správny slovenský preklad.</p>
+      <section className="app-section matching-section">
+        <h2>🧩 Priraďovanie slovíčok</h2>
+        <p>Presuň anglické slovíčko na správny slovenský preklad.</p>
 
-      <button onClick={resetMatching}>Reset</button>
+        <div className="filters">
+          <input
+            placeholder="Hľadať v hre..."
+            value={matchingSearch}
+            onChange={(e) => setMatchingSearch(e.target.value)}
+          />
 
-      <div className="matching-box">
-        <div className="matching-column">
-          <h3>EN</h3>
-          {filteredWords.map((w) => (
-            <div
-              key={w.id}
-              className="drag-card"
-              draggable
-              onDragStart={() => setDraggedWordId(w.id)}
-            >
-              {w.en}
-            </div>
-          ))}
+          <select
+            value={matchingFilterDate}
+            onChange={(e) => setMatchingFilterDate(e.target.value)}
+          >
+            <option value="all">Všetky lekcie</option>
+            {dateOptions.map((date) => (
+              <option key={date} value={date}>
+                {formatDate(date)}
+              </option>
+            ))}
+          </select>
+
+          <button onClick={resetMatching}>Reset</button>
         </div>
 
-        <div className="matching-column">
-          <h3>SK</h3>
-          {filteredWords.map((w) => {
-            const matchedId = matches[w.id];
-            const matchedWord = filteredWords.find((item) => item.id === matchedId);
-            const isCorrect = matchedId === w.id;
-            const isWrong = matchedId && matchedId !== w.id;
-
-            return (
+        <div className="matching-box">
+          <div className="matching-column">
+            <h3>EN</h3>
+            {matchingWords.map((w) => (
               <div
                 key={w.id}
-                className={`drop-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={() => handleDrop(w.id)}
+                className="drag-card"
+                draggable
+                onDragStart={() => setDraggedWordId(w.id)}
               >
-                <strong>{w.sk}</strong>
-                <span>{matchedWord ? matchedWord.en : "Sem presuň EN"}</span>
+                {w.en}
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          <div className="matching-column">
+            <h3>SK</h3>
+            {matchingWords.map((w) => {
+              const matchedId = matches[w.id];
+              const matchedWord = matchingWords.find((item) => item.id === matchedId);
+              const isCorrect = matchedId === w.id;
+              const isWrong = matchedId && matchedId !== w.id;
+
+              return (
+                <div
+                  key={w.id}
+                  className={`drop-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => handleDrop(w.id)}
+                >
+                  <strong>{w.sk}</strong>
+                  <span>{matchedWord ? matchedWord.en : "Sem presuň EN"}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section className="app-section words-section">
+        <h2>📚 Slovíčka z cloudu</h2>
+
+        <div className="filters">
+          <input
+            placeholder="Hľadať..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <select value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
+            <option value="all">Všetky lekcie</option>
+            {dateOptions.map((date) => (
+              <option key={date} value={date}>
+                {formatDate(date)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {filteredWords.map((w) => (
+          <div key={w.id} className="word-row">
+            {editingId === w.id ? (
+              <>
+                <input
+                  value={editEn}
+                  spellCheck={true}
+                  lang="en"
+                  onChange={(e) => setEditEn(e.target.value)}
+                />
+                <input value={editSk} onChange={(e) => setEditSk(e.target.value)} />
+                <button onClick={() => updateWord(w.id)}>💾</button>
+              </>
+            ) : (
+              <>
+                <strong>{w.en}</strong> — {w.sk}
+                <span className="lesson-date">📅 {formatDate(w.lesson_date)}</span>
+                <button onClick={() => speak(w.en)}>🔊</button>
+                <button
+                  onClick={() => {
+                    setEditingId(w.id);
+                    setEditEn(w.en);
+                    setEditSk(w.sk);
+                  }}
+                >
+                  ✏️
+                </button>
+                <button onClick={() => deleteWord(w.id)}>🗑️</button>
+              </>
+            )}
+          </div>
+        ))}
+      </section>
     </div>
   );
 }
