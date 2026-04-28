@@ -349,34 +349,26 @@ export default function App() {
                   className="drag-card"
                   draggable={!isMatched}
                   onDragStart={() => setDraggedWordId(w.id)}
-                  style={{ opacity: isMatched ? 0.2 : 1 }}
+                  style={{ opacity: isMatched ? 0.2 : 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}
                 >
                   {isMatched ? (
-                    <button
-                      type="button"
-                      className="sound-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        speak(w.en);
-                      }}
-                    >
-                      🔊
-                    </button>
+                    <span />
                   ) : (
-                    <>
-                      <span>{w.en}</span>
-                      <button
-                        type="button"
-                        className="sound-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          speak(w.en);
-                        }}
-                      >
-                        🔊
-                      </button>
-                    </>
+                    <span>{w.en}</span>
                   )}
+
+                  <button
+                    type="button"
+                    className="sound-btn"
+                    draggable={false}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      speak(w.en);
+                    }}
+                  >
+                    🔊
+                  </button>
                 </div>
               );
             })}
@@ -398,14 +390,19 @@ export default function App() {
                   onDrop={() => handleDrop(w.id)}
                 >
                   <strong>{w.sk}</strong>
-                  <span>
+                  <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                     {matchedWord ? (
                       <>
-                        {matchedWord.en}
+                        <span>{matchedWord.en}</span>
                         <button
                           type="button"
                           className="sound-btn"
-                          onClick={() => speak(matchedWord.en)}
+                          draggable={false}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speak(matchedWord.en);
+                          }}
                         >
                           🔊
                         </button>
