@@ -23,6 +23,33 @@ function formatDate(date) {
   return date;
 }
 
+function shuffleArray(array) {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleWithoutSameRows(enWords, skWords) {
+  if (enWords.length <= 1) return skWords;
+
+  let shuffled = shuffleArray(skWords);
+  let tries = 0;
+
+  while (tries < 50 && shuffled.some((word, index) => word.id === enWords[index]?.id)) {
+    shuffled = shuffleArray(skWords);
+    tries++;
+  }
+
+  if (shuffled.some((word, index) => word.id === enWords[index]?.id)) {
+    shuffled = [...shuffled.slice(1), shuffled[0]];
+  }
+
+  return shuffled;
+}
+
 export default function App() {
   const [password, setPassword] = useState("");
   const [words, setWords] = useState([]);
@@ -42,6 +69,7 @@ export default function App() {
   const [matchingFilterDate, setMatchingFilterDate] = useState("all");
   const [draggedWordId, setDraggedWordId] = useState(null);
   const [matches, setMatches] = useState({});
+  const [shuffleSeed, setShuffleSeed] = useState(0);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -205,6 +233,14 @@ export default function App() {
     });
   }, [words, matchingSearch, matchingFilterDate]);
 
+  const matchingEnWords = useMemo(() => {
+    return shuffleArray(matchingWords);
+  }, [matchingWords, shuffleSeed]);
+
+  const matchingSkWords = useMemo(() => {
+    return shuffleWithoutSameRows(matchingEnWords, matchingWords);
+  }, [matchingEnWords, matchingWords, shuffleSeed]);
+
   const handleDrop = (skWordId) => {
     if (!draggedWordId) return;
 
@@ -218,6 +254,7 @@ export default function App() {
 
   const resetMatching = () => {
     setMatches({});
+    setShuffleSeed((prev) => prev + 1);
   };
 
   if (!user) {
@@ -303,7 +340,7 @@ export default function App() {
         <div className="matching-box">
           <div className="matching-column">
             <h3>EN</h3>
-            {matchingWords.map((w) => (
+            {matchingEnWords.map((w) => (
               <div
                 key={w.id}
                 className="drag-card"
@@ -317,7 +354,7 @@ export default function App() {
 
           <div className="matching-column">
             <h3>SK</h3>
-            {matchingWords.map((w) => {
+            {matchingSkWords.map((w) => {
               const matchedId = matches[w.id];
               const matchedWord = matchingWords.find((item) => item.id === matchedId);
               const isCorrect = matchedId === w.id;
