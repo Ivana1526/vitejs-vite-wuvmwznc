@@ -129,6 +129,12 @@ button:hover {
   border-radius: 16px;
   margin: 10px 0;
   background: #f8fafc;
+  transition: all 0.25s ease; /* 👉 PRIDAŤ SEM */
+}
+/* keď je slovo priradené → plná čiara */
+.drop-card.correct,
+.drop-card.wrong {
+  border-style: solid;
 }
 
 .drop-card.correct {
