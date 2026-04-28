@@ -340,16 +340,46 @@ export default function App() {
         <div className="matching-box">
           <div className="matching-column">
             <h3>EN</h3>
-            {matchingEnWords.map((w) => (
-              <div
-                key={w.id}
-                className="drag-card"
-                draggable
-                onDragStart={() => setDraggedWordId(w.id)}
-              >
-                {w.en}
-              </div>
-            ))}
+            {matchingEnWords.map((w) => {
+              const isMatched = Object.values(matches).includes(w.id);
+
+              return (
+                <div
+                  key={w.id}
+                  className="drag-card"
+                  draggable={!isMatched}
+                  onDragStart={() => setDraggedWordId(w.id)}
+                  style={{ opacity: isMatched ? 0.2 : 1 }}
+                >
+                  {isMatched ? (
+                    <button
+                      type="button"
+                      className="sound-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        speak(w.en);
+                      }}
+                    >
+                      🔊
+                    </button>
+                  ) : (
+                    <>
+                      <span>{w.en}</span>
+                      <button
+                        type="button"
+                        className="sound-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          speak(w.en);
+                        }}
+                      >
+                        🔊
+                      </button>
+                    </>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="matching-column">
@@ -368,7 +398,22 @@ export default function App() {
                   onDrop={() => handleDrop(w.id)}
                 >
                   <strong>{w.sk}</strong>
-                  <span>{matchedWord ? matchedWord.en : "Sem presuň EN"}</span>
+                  <span>
+                    {matchedWord ? (
+                      <>
+                        {matchedWord.en}
+                        <button
+                          type="button"
+                          className="sound-btn"
+                          onClick={() => speak(matchedWord.en)}
+                        >
+                          🔊
+                        </button>
+                      </>
+                    ) : (
+                      "Sem presuň EN"
+                    )}
+                  </span>
                 </div>
               );
             })}
