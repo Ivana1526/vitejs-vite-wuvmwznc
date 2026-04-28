@@ -430,7 +430,10 @@ export default function App() {
 
       <section className="app-section matching-section">
         <h2>🧩 Priraďovanie slovíčok</h2>
-        <p>Presuň anglické slovíčko na správny slovenský preklad. Na mobile najprv ťukni na EN slovíčko a potom na SK preklad.</p>
+        <p>
+          Presuň anglické slovíčko na správny slovenský preklad. Na mobile najprv ťukni na EN slovíčko a potom na SK preklad.
+          Ak je slovo zle priradené, ťukni na priradené EN slovo v SK dlaždici a potom ho priraď inde alebo ho vráť späť do EN.
+        </p>
 
         <div className="progress-box">
           <div
