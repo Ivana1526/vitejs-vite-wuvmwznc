@@ -241,6 +241,12 @@ export default function App() {
     return shuffleWithoutSameRows(matchingEnWords, matchingWords);
   }, [matchingEnWords, matchingWords, shuffleSeed]);
 
+  const correctCount = Object.keys(matches).filter(
+    (skId) => matches[skId] === skId
+  ).length;
+
+  const totalCount = matchingWords.length;
+
   const handleDrop = (skWordId) => {
     if (!draggedWordId) return;
 
@@ -340,6 +346,14 @@ export default function App() {
       <section className="app-section matching-section">
         <h2>🧩 Priraďovanie slovíčok</h2>
         <p>Presuň anglické slovíčko na správny slovenský preklad.</p>
+
+        <div className="progress-box">
+          <div
+            className="progress-bar"
+            style={{ width: `${(correctCount / totalCount) * 100 || 0}%` }}
+          />
+          <span>{correctCount} / {totalCount} správne</span>
+        </div>
 
         <div className="filters">
           <input
