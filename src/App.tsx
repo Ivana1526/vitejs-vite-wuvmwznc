@@ -270,39 +270,82 @@ export default function App() {
 
   const totalCount = matchingWords.length;
 
-  const handleDrop = (skWordId) => {
-    if (!draggedWordId) return;
+  const moveWordToSk = (skWordId, wordId) => {
+    if (!wordId) return;
 
     setMatches((prev) => {
       const updated = { ...prev };
 
       Object.keys(updated).forEach((key) => {
-        if (updated[key] === draggedWordId) {
+        if (updated[key] === wordId) {
           delete updated[key];
         }
       });
 
-      updated[skWordId] = draggedWordId;
+      updated[skWordId] = wordId;
       return updated;
     });
+  };
 
+  const returnWordToEn = (wordId) => {
+    if (!wordId) return;
+
+    setMatches((prev) => {
+      const updated = { ...prev };
+
+      Object.keys(updated).forEach((key) => {
+        if (updated[key] === wordId) {
+          delete updated[key];
+        }
+      });
+
+      return updated;
+    });
+  };
+
+  const handleDrop = (skWordId) => {
+    if (!draggedWordId) return;
+    moveWordToSk(skWordId, draggedWordId);
     setDraggedWordId(null);
   };
 
   const handleReturnToEn = () => {
     if (!draggedWordId) return;
+    returnWordToEn(draggedWordId);
+    setDraggedWordId(null);
+  };
 
-    setMatches((prev) => {
-      const updated = { ...prev };
+  const handleTouchMove = (e) => {
+    const touch = e.touches[0];
+    if (!touch) return;
 
-      Object.keys(updated).forEach((key) => {
-        if (updated[key] === draggedWordId) {
-          delete updated[key];
-        }
-      });
+    const edgeSize = 90;
+    const scrollSpeed = 14;
 
-      return updated;
-    });
+    if (touch.clientY < edgeSize) {
+      window.scrollBy({ top: -scrollSpeed, behavior: "auto" });
+    }
+
+    if (window.innerHeight - touch.clientY < edgeSize) {
+      window.scrollBy({ top: scrollSpeed, behavior: "auto" });
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!draggedWordId) return;
+
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const dropTarget = target?.closest?.("[data-drop-id]");
+    const enTarget = target?.closest?.("[data-return-zone='en']");
+
+    if (dropTarget) {
+      moveWordToSk(dropTarget.dataset.dropId, draggedWordId);
+    } else if (enTarget) {
+      returnWordToEn(draggedWordId);
+    }
 
     setDraggedWordId(null);
   };
@@ -403,6 +446,7 @@ export default function App() {
         <div className="matching-box">
           <div
             className="matching-column"
+            data-return-zone="en"
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleReturnToEn}
           >
@@ -416,6 +460,9 @@ export default function App() {
                   className="drag-card"
                   draggable={!isMatched}
                   onDragStart={() => setDraggedWordId(w.id)}
+                  onTouchStart={() => setDraggedWordId(w.id)}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                   style={{ opacity: isMatched ? 0.2 : 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}
                 >
                   {isMatched ? (
@@ -452,6 +499,7 @@ export default function App() {
               return (
                 <div
                   key={w.id}
+                  data-drop-id={w.id}
                   className={`drop-card ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => handleDrop(w.id)}
@@ -463,6 +511,11 @@ export default function App() {
                     onDragStart={() => {
                       if (matchedWord) setDraggedWordId(matchedWord.id);
                     }}
+                    onTouchStart={() => {
+                      if (matchedWord) setDraggedWordId(matchedWord.id);
+                    }}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                   >
                     {matchedWord ? (
                       <>
