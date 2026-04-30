@@ -71,6 +71,7 @@ export default function App() {
   const [selectedWordId, setSelectedWordId] = useState(null);
   const [matches, setMatches] = useState({});
   const [shuffleSeed, setShuffleSeed] = useState(0);
+  const [activePage, setActivePage] = useState("matching");
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -403,6 +404,19 @@ export default function App() {
       <button onClick={signOut}>Odhlásiť</button>
       <h1>🌍 Cloud verzia appky</h1>
 
+      <nav className="app-menu">
+        <button className={activePage === "matching" ? "active" : ""} onClick={() => setActivePage("matching")}>Priraďovanie slovíčok</button>
+        <button className={activePage === "addWords" ? "active" : ""} onClick={() => setActivePage("addWords")}>Pridávanie slovíčok</button>
+        <button className={activePage === "wordCards" ? "active" : ""} onClick={() => setActivePage("wordCards")}>Slovníčkové kartičky</button>
+        <button className={activePage === "audioCards" ? "active" : ""} onClick={() => setActivePage("audioCards")}>Audio kartičky</button>
+        <button className={activePage === "sentences" ? "active" : ""} onClick={() => setActivePage("sentences")}>Vety</button>
+        <button className={activePage === "addSentences" ? "active" : ""} onClick={() => setActivePage("addSentences")}>Pridávanie viet</button>
+        <button className={activePage === "reading" ? "active" : ""} onClick={() => setActivePage("reading")}>Čítanie</button>
+        <button className={activePage === "grammar" ? "active" : ""} onClick={() => setActivePage("grammar")}>Gramatika</button>
+        <button className={activePage === "addGrammar" ? "active" : ""} onClick={() => setActivePage("addGrammar")}>Pridávanie gramatiky</button>
+      </nav>
+
+      {activePage === "addWords" && (
       <section className="app-section add-section">
         <h2>➕ Pridať slovíčko</h2>
 
@@ -427,7 +441,9 @@ export default function App() {
           <button onClick={addWord}>Pridať</button>
         </div>
       </section>
+      )}
 
+      {activePage === "matching" && (
       <section className="app-section matching-section">
         <h2>🧩 Priraďovanie slovíčok</h2>
         <p>
@@ -575,7 +591,9 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
+      {activePage === "addWords" && (
       <section className="app-section words-section">
         <h2>📚 Slovíčka z cloudu</h2>
 
@@ -629,6 +647,56 @@ export default function App() {
           </div>
         ))}
       </section>
+      )}
+
+      {activePage === "wordCards" && (
+        <section className="app-section">
+          <h2>🃏 Slovníčkové kartičky</h2>
+          <p>Tu budú kartičky z pridaných slovíčok: predná strana English + 🔊, zadná strana Slovensky.</p>
+        </section>
+      )}
+
+      {activePage === "audioCards" && (
+        <section className="app-section">
+          <h2>🎧 Audio kartičky</h2>
+          <p>Tu budú audio kartičky: najprv zvuk v angličtine, po otočení slovenský význam.</p>
+        </section>
+      )}
+
+      {activePage === "sentences" && (
+        <section className="app-section">
+          <h2>✍️ Vety</h2>
+          <p>Tu bude cvičenie viet.</p>
+        </section>
+      )}
+
+      {activePage === "addSentences" && (
+        <section className="app-section">
+          <h2>➕ Pridávanie viet</h2>
+          <p>Tu budeme pridávať celé anglické vety a ich slovenské preklady.</p>
+        </section>
+      )}
+
+      {activePage === "reading" && (
+        <section className="app-section">
+          <h2>📖 Čítanie</h2>
+          <p>Tu budú dlhšie texty na čítanie.</p>
+        </section>
+      )}
+
+      {activePage === "grammar" && (
+        <section className="app-section">
+          <h2>📘 Gramatika</h2>
+          <p>Tu budú gramatické poznámky a texty.</p>
+        </section>
+      )}
+
+      {activePage === "addGrammar" && (
+        <section className="app-section">
+          <h2>➕ Pridávanie gramatiky</h2>
+          <p>Tu bude možnosť vložiť štruktúrovaný gramatický text.</p>
+        </section>
+      )}
     </div>
   );
 }
