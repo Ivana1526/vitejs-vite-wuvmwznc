@@ -73,6 +73,8 @@ export default function App() {
   const [shuffleSeed, setShuffleSeed] = useState(0);
   const [activePage, setActivePage] = useState("matching");
   const [cardFrontSide, setCardFrontSide] = useState("en");
+  const [wordCardShuffleSeed, setWordCardShuffleSeed] = useState(0);
+  const [audioCardShuffleSeed, setAudioCardShuffleSeed] = useState(0);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -262,6 +264,14 @@ export default function App() {
   const matchingEnWords = useMemo(() => {
     return shuffleArray(matchingWords);
   }, [matchingWords, shuffleSeed]);
+
+  const wordCardWords = useMemo(() => {
+    return shuffleArray(words);
+  }, [words, wordCardShuffleSeed]);
+
+  const audioCardWords = useMemo(() => {
+    return shuffleArray(words);
+  }, [words, audioCardShuffleSeed]);
 
   const matchingSkWords = useMemo(() => {
     return shuffleWithoutSameRows(matchingEnWords, matchingWords);
@@ -662,10 +672,13 @@ export default function App() {
               <option value="en">Anglická + zvuk</option>
               <option value="sk">Slovenská</option>
             </select>
+            <button onClick={() => setWordCardShuffleSeed((prev) => prev + 1)}>
+              Premiešať
+            </button>
           </div>
 
           <div className="cards-grid">
-            {words.map((w) => (
+            {wordCardWords.map((w) => (
               <div
                 key={w.id}
                 className="word-card"
@@ -722,8 +735,14 @@ export default function App() {
         <section className="app-section">
           <h2>🎧 Audio kartičky</h2>
 
+          <div className="filters">
+            <button onClick={() => setAudioCardShuffleSeed((prev) => prev + 1)}>
+              Premiešať
+            </button>
+          </div>
+
           <div className="cards-grid">
-            {words.map((w) => (
+            {audioCardWords.map((w) => (
               <div
                 key={w.id}
                 className="word-card"
