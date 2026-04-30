@@ -179,3 +179,51 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.word-card {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+
+.word-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-front {
+  background: linear-gradient(135deg,#4f46e5,#7c3aed);
+  color: white;
+}
+
+.card-back {
+  background: #f8fafc;
+  transform: rotateY(180deg);
+  justify-content: center;
+  font-weight: bold;
+}

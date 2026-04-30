@@ -652,7 +652,37 @@ export default function App() {
       {activePage === "wordCards" && (
         <section className="app-section">
           <h2>🃏 Slovníčkové kartičky</h2>
-          <p>Tu budú kartičky z pridaných slovíčok: predná strana English + 🔊, zadná strana Slovensky.</p>
+
+          <div className="cards-grid">
+            {words.map((w) => (
+              <div
+                key={w.id}
+                className="word-card"
+                onClick={(e) => {
+                  e.currentTarget.classList.toggle("flipped");
+                }}
+              >
+                <div className="card-inner">
+                  <div className="card-front">
+                    <span>{w.en}</span>
+                    <button
+                      className="sound-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        speak(w.en);
+                      }}
+                    >
+                      🔊
+                    </button>
+                  </div>
+
+                  <div className="card-back">
+                    <span>{w.sk}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
