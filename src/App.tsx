@@ -72,6 +72,7 @@ export default function App() {
   const [matches, setMatches] = useState({});
   const [shuffleSeed, setShuffleSeed] = useState(0);
   const [activePage, setActivePage] = useState("matching");
+  const [cardFrontSide, setCardFrontSide] = useState("en");
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -653,6 +654,16 @@ export default function App() {
         <section className="app-section">
           <h2>🃏 Slovníčkové kartičky</h2>
 
+          <div className="filters">
+            <label>
+              Vrchná strana karty:
+            </label>
+            <select value={cardFrontSide} onChange={(e) => setCardFrontSide(e.target.value)}>
+              <option value="en">Anglická + zvuk</option>
+              <option value="sk">Slovenská</option>
+            </select>
+          </div>
+
           <div className="cards-grid">
             {words.map((w) => (
               <div
@@ -664,20 +675,41 @@ export default function App() {
               >
                 <div className="card-inner">
                   <div className="card-front">
-                    <span>{w.en}</span>
-                    <button
-                      className="sound-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        speak(w.en);
-                      }}
-                    >
-                      🔊
-                    </button>
+                    {cardFrontSide === "en" ? (
+                      <>
+                        <span>{w.en}</span>
+                        <button
+                          className="sound-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speak(w.en);
+                          }}
+                        >
+                          🔊
+                        </button>
+                      </>
+                    ) : (
+                      <span>{w.sk}</span>
+                    )}
                   </div>
 
                   <div className="card-back">
-                    <span>{w.sk}</span>
+                    {cardFrontSide === "en" ? (
+                      <span>{w.sk}</span>
+                    ) : (
+                      <>
+                        <span>{w.en}</span>
+                        <button
+                          className="sound-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speak(w.en);
+                          }}
+                        >
+                          🔊
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
