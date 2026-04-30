@@ -721,7 +721,36 @@ export default function App() {
       {activePage === "audioCards" && (
         <section className="app-section">
           <h2>🎧 Audio kartičky</h2>
-          <p>Tu budú audio kartičky: najprv zvuk v angličtine, po otočení slovenský význam.</p>
+
+          <div className="cards-grid">
+            {words.map((w) => (
+              <div
+                key={w.id}
+                className="word-card"
+                onClick={(e) => {
+                  e.currentTarget.classList.toggle("flipped");
+                }}
+              >
+                <div className="card-inner">
+                  <div className="card-front" style={{ justifyContent: "center" }}>
+                    <button
+                      className="sound-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        speak(w.en);
+                      }}
+                    >
+                      🔊
+                    </button>
+                  </div>
+
+                  <div className="card-back" style={{ justifyContent: "center" }}>
+                    <span>{w.sk}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
